@@ -25,6 +25,7 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f040000;
+        public static final int graph_title=0x7f040003;
         public static final int hello_world=0x7f040001;
         public static final int menu_settings=0x7f040002;
     }

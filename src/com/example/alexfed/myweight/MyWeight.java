@@ -9,10 +9,10 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.LineGraphView;
- 
+
 public class MyWeight extends Activity {
 
-	private static final String EXPORT_FILE = "/mnt/sdcard/myweight.csv"; 
+	private static final String EXPORT_FILE = "/mnt/sdcard/myweight.csv";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -23,10 +23,7 @@ public class MyWeight extends Activity {
 		if(data == null)
 			return;
 		
-		GraphView graphView = new LineGraphView(  
-		      this  
-		      , "My Weight"  
-		);  
+		GraphView graphView = new LineGraphView(this, "");  
 		// add data  
 		graphView.addSeries(new GraphViewSeries(data));   
 		if(data.length >= 50)
