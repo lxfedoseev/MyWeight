@@ -9,8 +9,8 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.LineGraphView;
-
-public class MyWeight extends Activity {
+ 
+public class MyWeight extends Activity { 
 
 	private static final String EXPORT_FILE = "/mnt/sdcard/myweight.csv";
 	@Override
@@ -27,13 +27,14 @@ public class MyWeight extends Activity {
 		// add data  
 		graphView.addSeries(new GraphViewSeries(data));   
 		if(data.length >= 50)
-			graphView.setViewPort(data.length-50, 50); 
+			graphView.setViewPort(data.length-50, 50);  
 		else
 			graphView.setViewPort(0, data.length);
 		
 		graphView.setScrollable(true);  
 		// optional - activate scaling / zooming  
 		graphView.setScalable(true);   
+		//graphView.setManualYAxisBounds(74, 70);
 		
 		LinearLayout layout = (LinearLayout) findViewById(R.id.layout);  
 		layout.addView(graphView);  
