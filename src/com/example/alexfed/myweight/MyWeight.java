@@ -9,7 +9,7 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.LineGraphView;
-
+ 
 public class MyWeight extends Activity {
 
 	private static final String EXPORT_FILE = "/mnt/sdcard/myweight.csv"; 
