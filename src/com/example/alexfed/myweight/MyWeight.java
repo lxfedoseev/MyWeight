@@ -103,8 +103,8 @@ public class MyWeight extends Activity {
 		graphView.setScalable(true);   
 		graphView.setManualYAxisBounds(ie.getMaxValue()+0.1, ie.getMinValue()-0.1);
 		//graphView.setHorizontalLabels(new String[] {"a", "b", "c"});
-		graphView.getGraphViewStyle().setHorizontalLabelsColor(Color.BLACK); 
-		graphView.getGraphViewStyle().setVerticalLabelsColor(Color.BLACK);
+		graphView.getGraphViewStyle().setHorizontalLabelsColor(Color.WHITE); 
+		graphView.getGraphViewStyle().setVerticalLabelsColor(Color.WHITE);
  		
 		setLabelParams(graphView);		
 		
@@ -158,8 +158,8 @@ public class MyWeight extends Activity {
 		graphView.setScalable(true);   
 		//graphView.setManualYAxisBounds(ie.getMaxValue()+0.1, ie.getMinValue()-0.1); //TODO:
 		//graphView.setHorizontalLabels(new String[] {"a", "b", "c"});
-		graphView.getGraphViewStyle().setHorizontalLabelsColor(Color.BLACK); 
-		graphView.getGraphViewStyle().setVerticalLabelsColor(Color.BLACK);
+		graphView.getGraphViewStyle().setHorizontalLabelsColor(Color.WHITE); 
+		graphView.getGraphViewStyle().setVerticalLabelsColor(Color.WHITE);
 		
 		setLabelParams(graphView);		
 		
