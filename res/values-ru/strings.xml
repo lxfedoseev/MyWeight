@@ -5,5 +5,11 @@
     <string name="hello_world">Привет мир!</string>
     <string name="menu_settings">Настройки</string>
     <string name="graph_title">Мой вес</string>
-
+    <string name="menu_export_csv">Экспортировать из CSV</string>
+	<string name="menu_export_db">Экспортировать из базы</string>
+	<string name="menu_add">Добавить</string>
+	<string name="menu_clear_db">Очистить базу</string>
+	<string name="db_empty">База данных пуста</string>
+	<string name="db_clear">База данных очищена</string>
+	
 </resources>
