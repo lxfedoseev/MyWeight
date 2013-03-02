@@ -58,7 +58,7 @@ public class MyWeight extends Activity {
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		super.onRestoreInstanceState(savedInstanceState);
+		super.onRestoreInstanceState(savedInstanceState); 
 		
 		viewportStart = savedInstanceState.getDouble("start");
 		viewportSize = savedInstanceState.getDouble("size");
@@ -69,9 +69,6 @@ public class MyWeight extends Activity {
 	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
-		super.onSaveInstanceState(outState);
-	
 		if( graphView != null ){
 			double vp[] = graphView.getViewPort();
 			outState.putDouble("start", vp[0]);
@@ -80,6 +77,8 @@ public class MyWeight extends Activity {
 			outState.putDouble("start", 0.0);
 			outState.putDouble("size", 0.0);
 		}
+		
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
