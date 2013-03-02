@@ -17,7 +17,6 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.LineGraphView;
- 
 public class MyWeight extends Activity { 
 
 	private static final String EXPORT_FILE = "/mnt/sdcard/myweight.csv";
@@ -25,7 +24,10 @@ public class MyWeight extends Activity {
 	private static final int BASIC_FONT_SIZE = 14;
 	private static final int BASIC_VLABEL_WIDTH = 100;
 	
+	private GraphView graphView;
 	private LinearLayout layout;
+	private double viewportStart;
+	private double viewportSize;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +35,51 @@ public class MyWeight extends Activity {
 		setContentView(R.layout.activity_my_weight); 
 		
 		//my code
+		graphView = null;
 		layout = (LinearLayout) findViewById(R.id.layout);
+	}
+
+	
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
 		populateDataFromCsv();
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+	 */
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
+		
+		viewportStart = savedInstanceState.getDouble("start");
+		viewportSize = savedInstanceState.getDouble("size");
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+	 */
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+	
+		if( graphView != null ){
+			double vp[] = graphView.getViewPort();
+			outState.putDouble("start", vp[0]);
+			outState.putDouble("size", vp[1]);
+		}else{
+			outState.putDouble("start", 0.0);
+			outState.putDouble("size", 0.0);
+		}
 	}
 
 	@Override
@@ -77,7 +122,7 @@ public class MyWeight extends Activity {
 		
 		layout.removeAllViews();
 		
-		GraphView graphView = new LineGraphView(this, ""){   
+		graphView = new LineGraphView(this, ""){   
 			   @Override  
 			   protected String formatLabel(double value, boolean isValueX) {  
 			      if (isValueX) {
@@ -94,11 +139,16 @@ public class MyWeight extends Activity {
 		};
 			
 		// add data  
-		graphView.addSeries(new GraphViewSeries(data));   
-		if(data.length >= 50)
-			graphView.setViewPort(data.length-50, 50);   
-		else
-			graphView.setViewPort(0, data.length); 
+		graphView.addSeries(new GraphViewSeries(data));  
+		
+		if(viewportStart==0.0 && viewportSize==0.0){
+			if(data.length >= 50)
+				graphView.setViewPort(data.length-50, 50);   
+			else
+				graphView.setViewPort(0, data.length); 
+		}else{
+			graphView.setViewPort(viewportStart, viewportSize); 
+		}
 		
 		graphView.setScrollable(true);   
 		// optional - activate scaling / zooming  
@@ -138,7 +188,7 @@ public class MyWeight extends Activity {
 			i++;
 		}
 		
-		GraphView graphView = new LineGraphView(this, ""){ 
+		graphView = new LineGraphView(this, ""){ 
 			   @Override  
 			   protected String formatLabel(double value, boolean isValueX) {  
 			      if (isValueX) {
@@ -155,11 +205,17 @@ public class MyWeight extends Activity {
 		};
 			
 		// add data  
-		graphView.addSeries(new GraphViewSeries(data));   
-		if(data.length >= 50)
-			graphView.setViewPort(data.length-50, 50);   
-		else
-			graphView.setViewPort(0, data.length); 
+		graphView.addSeries(new GraphViewSeries(data)); 
+		
+		// TODO:
+		//if(viewportStart==0.0 && viewportSize==0.0){
+			if(data.length >= 50)
+				graphView.setViewPort(data.length-50, 50);   
+			else
+				graphView.setViewPort(0, data.length); 
+		//}else{
+		//	graphView.setViewPort(viewportStart, viewportSize);
+		//}
 		
 		graphView.setScrollable(true);   
 		// optional - activate scaling / zooming  
