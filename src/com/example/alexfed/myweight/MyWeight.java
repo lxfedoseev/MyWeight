@@ -48,10 +48,10 @@ public class MyWeight extends Activity {
 		switch (item.getItemId()) {
     		case R.id.menu_settings:
     			return true;
-    		case R.id.menu_export_csv:
+    		case R.id.menu_import_csv:
     			populateDataFromCsv();
     			return true;
-    		case R.id.menu_export_db:
+    		case R.id.menu_import_db:
     			populateDataFromDB();
     			return true;
     		case R.id.menu_add:
