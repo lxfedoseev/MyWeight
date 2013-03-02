@@ -58,7 +58,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
  
         ContentValues values = new ContentValues();
-        values.put(KEY_DATE, w.getWeight()); 
+        values.put(KEY_DATE, w.getDate()); 
         values.put(KEY_WEIGHT, w.getWeight()); 
  
         // Inserting Row

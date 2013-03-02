@@ -1,11 +1,13 @@
 package com.example.alexfed.myweight;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -107,36 +109,42 @@ public class MyWeight extends Activity {
 		graphView.getGraphViewStyle().setVerticalLabelsColor(Color.WHITE);
  		
 		setLabelParams(graphView);		
-		
-		layout = (LinearLayout) findViewById(R.id.layout);   
+		 
 		layout.addView(graphView);  		
 	}
 	
 	private void populateDataFromDB(){
 		
 		DatabaseHandler db = new DatabaseHandler(this);
-		if(db.getWeightsCount()==0){
+		final int count = db.getWeightsCount();
+		if(count==0){
 			Toast.makeText(getApplicationContext(), R.string.db_empty, Toast.LENGTH_LONG).show();
 			return;
 		}
        
 		layout.removeAllViews();
 		
-		GraphViewData[] data = new GraphViewData[db.getWeightsCount()];
+		GraphViewData[] data = new GraphViewData[count];
 		List<WeightEntry> weights = db.getAllWeight();
+		final ArrayList<String> dateList = new ArrayList<String>();
+		double maxV = Double.MIN_VALUE;
+		double minV = Double.MAX_VALUE;
 		int i = 0;
 		for (WeightEntry w : weights) {
 			data[i] = new GraphViewData(w.getID(), Double.parseDouble(w.getWeight()));
+			maxV = Math.max(data[i].valueY, maxV);
+			minV = Math.min(data[i].valueY, minV);
+			dateList.add(w.getDate());
 			i++;
 		}
 		
-        	
-		GraphView graphView = new LineGraphView(this, "");/*{   //TODO:
+		GraphView graphView = new LineGraphView(this, ""){ 
 			   @Override  
 			   protected String formatLabel(double value, boolean isValueX) {  
 			      if (isValueX) {
 			    	  int i = (int) value;
-			    	  return ie.getDateValue(i<=0?0:i-1);
+			    	  String s = dateList.get(i<=0?0:(i>count)?count-1:i-1);
+			    	  return s.substring(0,6)+s.substring(8);
 			      } else {
 			    	  double result = value * 10; 
 			    	  result = Math.round(result);
@@ -144,7 +152,7 @@ public class MyWeight extends Activity {
 			          return ""+result; 
 			      }
 			   }  
-		};*/
+		};
 			
 		// add data  
 		graphView.addSeries(new GraphViewSeries(data));   
@@ -156,14 +164,13 @@ public class MyWeight extends Activity {
 		graphView.setScrollable(true);   
 		// optional - activate scaling / zooming  
 		graphView.setScalable(true);   
-		//graphView.setManualYAxisBounds(ie.getMaxValue()+0.1, ie.getMinValue()-0.1); //TODO:
+		graphView.setManualYAxisBounds(maxV+0.1, minV-0.1);
 		//graphView.setHorizontalLabels(new String[] {"a", "b", "c"});
 		graphView.getGraphViewStyle().setHorizontalLabelsColor(Color.WHITE); 
 		graphView.getGraphViewStyle().setVerticalLabelsColor(Color.WHITE);
 		
 		setLabelParams(graphView);		
 		
-		layout = (LinearLayout) findViewById(R.id.layout);   
 		layout.addView(graphView);  	
 		
 	}
