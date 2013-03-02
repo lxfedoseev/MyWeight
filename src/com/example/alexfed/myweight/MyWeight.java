@@ -2,12 +2,15 @@ package com.example.alexfed.myweight;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -49,7 +52,27 @@ public class MyWeight extends Activity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		viewportStart = Double.parseDouble(prefs.getString("prefViewportStart", "0.0"));
+		viewportSize = Double.parseDouble(prefs.getString("prefViewportSize", "0.0"));
 		populateDataFromCsv();
+	}
+	
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		
+		double vp[] = graphView.getViewPort();
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString("prefViewportStart",""+vp[0]);
+		editor.putString("prefViewportSize",""+vp[1]);
+		editor.commit();
 	}
 
 	/* (non-Javadoc)
@@ -59,9 +82,7 @@ public class MyWeight extends Activity {
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onRestoreInstanceState(savedInstanceState); 
-		
-		viewportStart = savedInstanceState.getDouble("start");
-		viewportSize = savedInstanceState.getDouble("size");
+		// Add code here
 	}
 
 	/* (non-Javadoc)
@@ -69,14 +90,7 @@ public class MyWeight extends Activity {
 	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		if( graphView != null ){
-			double vp[] = graphView.getViewPort();
-			outState.putDouble("start", vp[0]);
-			outState.putDouble("size", vp[1]);
-		}else{
-			outState.putDouble("start", 0.0);
-			outState.putDouble("size", 0.0);
-		}
+		//add code here, before onSaveInstanceState() !!!
 		
 		super.onSaveInstanceState(outState);
 	}
@@ -93,6 +107,8 @@ public class MyWeight extends Activity {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
     		case R.id.menu_settings:
+    			Intent settingsActivity = new Intent(getBaseContext(), MyPreferences.class);
+    			startActivity(settingsActivity);
     			return true;
     		case R.id.menu_import_csv:
     			populateDataFromCsv();

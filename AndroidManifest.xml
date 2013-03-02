@@ -22,6 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+        	android:name=".MyPreferences"
+        	android:label="@string/set_preferences">
+		</activity>
+
     </application>
 
 </manifest>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <EditTextPreference
+                android:name="EditText Preference"
+                android:summary="This allows you to enter a string"
+                android:defaultValue="0.0"
+                android:title="Edit This Text"
+                android:key="prefViewportStart" 
+                android:visible="false" />
+        <EditTextPreference
+                android:name="EditText Preference"
+                android:summary="This allows you to enter a string"
+                android:defaultValue="0.0"
+                android:title="Edit This Text"
+                android:key="prefViewportSize" 
+                android:visible="false" />
+</PreferenceScreen>

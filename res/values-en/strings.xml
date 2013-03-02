@@ -11,5 +11,6 @@
     <string name="menu_clear_db">Clear Database</string>
     <string name="db_empty">Data Base is Empty</string>
     <string name="db_clear">Data Base is Clear</string>
+    <string name="set_preferences">Settings</string> 
 
 </resources>
