@@ -2,9 +2,9 @@ package com.example.alexfed.myweight;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.Preferences;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -22,7 +22,7 @@ import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.LineGraphView;
 public class MyWeight extends Activity { 
 
-	private static final String EXPORT_FILE = "/mnt/sdcard/myweight.csv";
+	private static final String IMPORT_FILE = "/mnt/sdcard/myweight.csv";
 	private static final int BASIC_BORDER = 20;
 	private static final int BASIC_FONT_SIZE = 14;
 	private static final int BASIC_VLABEL_WIDTH = 100;
@@ -55,7 +55,7 @@ public class MyWeight extends Activity {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		viewportStart = Double.parseDouble(prefs.getString("prefViewportStart", "0.0"));
 		viewportSize = Double.parseDouble(prefs.getString("prefViewportSize", "0.0"));
-		populateDataFromCsv();
+		populateDataFromDB();
 	}
 	
 
@@ -111,74 +111,34 @@ public class MyWeight extends Activity {
     			startActivity(settingsActivity);
     			return true;
     		case R.id.menu_import_csv:
-    			populateDataFromCsv();
-    			return true;
-    		case R.id.menu_import_db:
-    			populateDataFromDB();
+    			if(importFromCsvToDB(getApplicationContext()) == false)
+    				Toast.makeText(getApplicationContext(), R.string.import_error, Toast.LENGTH_LONG).show();
+    			else
+    				populateDataFromDB();
     			return true;
     		case R.id.menu_add:
-    			testAddSomeWeights();
+    			//testAddSomeWeights();
     			return true;
     		case R.id.menu_clear_db:
     			clearDB();
+    			populateDataFromDB();
     			return true;
     		default:
     			return super.onOptionsItemSelected(item);
 		}
    
 	}
-
-	private void populateDataFromCsv(){
+	
+	private boolean importFromCsvToDB(Context context){
 		
-		final ImportExport ie = new ImportExport();
-		GraphViewData[] data = ie.ExportFromCsv(EXPORT_FILE); 
-		if(data == null)
-			return;
+		ImportExport ie = new ImportExport();
+		clearDB();
+		return ie.ImportFromCsvToDB(context, IMPORT_FILE);
+	}
+
+	private void populateDataFromDB(){
 		
 		layout.removeAllViews();
-		
-		graphView = new LineGraphView(this, ""){   
-			   @Override  
-			   protected String formatLabel(double value, boolean isValueX) {  
-			      if (isValueX) {
-			    	  int i = (int) value;
-			    	  return ie.getDateValue(i<=0?0:i-1);
-			    	  //return super.formatLabel(value, isValueX);   
-			      } else {
-			    	  double result = value * 10; 
-			    	  result = Math.round(result);
-			    	  result = result / 10;
-			          return ""+result; 
-			      }
-			   }  
-		};
-			
-		// add data  
-		graphView.addSeries(new GraphViewSeries(data));  
-		
-		if(viewportStart==0.0 && viewportSize==0.0){
-			if(data.length >= 50)
-				graphView.setViewPort(data.length-50, 50);   
-			else
-				graphView.setViewPort(0, data.length); 
-		}else{
-			graphView.setViewPort(viewportStart, viewportSize); 
-		}
-		
-		graphView.setScrollable(true);   
-		// optional - activate scaling / zooming  
-		graphView.setScalable(true);   
-		graphView.setManualYAxisBounds(ie.getMaxValue()+0.1, ie.getMinValue()-0.1);
-		//graphView.setHorizontalLabels(new String[] {"a", "b", "c"});
-		graphView.getGraphViewStyle().setHorizontalLabelsColor(Color.WHITE); 
-		graphView.getGraphViewStyle().setVerticalLabelsColor(Color.WHITE);
- 		
-		setLabelParams(graphView);		
-		 
-		layout.addView(graphView);  		
-	}
-	
-	private void populateDataFromDB(){
 		
 		DatabaseHandler db = new DatabaseHandler(this);
 		final int count = db.getWeightsCount();
@@ -186,8 +146,6 @@ public class MyWeight extends Activity {
 			Toast.makeText(getApplicationContext(), R.string.db_empty, Toast.LENGTH_LONG).show();
 			return;
 		}
-       
-		layout.removeAllViews();
 		
 		GraphViewData[] data = new GraphViewData[count];
 		List<WeightEntry> weights = db.getAllWeight();
@@ -222,15 +180,14 @@ public class MyWeight extends Activity {
 		// add data  
 		graphView.addSeries(new GraphViewSeries(data)); 
 		
-		// TODO:
-		//if(viewportStart==0.0 && viewportSize==0.0){
+		if(viewportStart==0.0 && viewportSize==0.0){
 			if(data.length >= 50)
 				graphView.setViewPort(data.length-50, 50);   
 			else
 				graphView.setViewPort(0, data.length); 
-		//}else{
-		//	graphView.setViewPort(viewportStart, viewportSize);
-		//}
+		}else{
+			graphView.setViewPort(viewportStart, viewportSize);
+		}
 		
 		graphView.setScrollable(true);   
 		// optional - activate scaling / zooming  
@@ -243,7 +200,6 @@ public class MyWeight extends Activity {
 		setLabelParams(graphView);		
 		
 		layout.addView(graphView);  	
-		
 	}
 	
 	private void clearDB(){
@@ -264,12 +220,13 @@ public class MyWeight extends Activity {
 	}
 	
 	private void testAddSomeWeights(){
-		DatabaseHandler db = new DatabaseHandler(this);
+		/*DatabaseHandler db = new DatabaseHandler(this);
 		
 		db.addWeight(new WeightEntry("01.01.2013", "71.2"));
         db.addWeight(new WeightEntry("05.01.2013", "72.2"));
         db.addWeight(new WeightEntry("10.01.2013", "71.5"));
         db.addWeight(new WeightEntry("15.01.2013", "71.8"));
+        */
 	}
 	
 	private void setLabelParams(GraphView graphView){

@@ -12,5 +12,6 @@
 	<string name="db_empty">База данных пуста</string>
 	<string name="db_clear">База данных очищена</string>
 	<string name="set_preferences">Настройки</string>
+	<string name="import_error">Ошибка импорта</string>
 	
 </resources>
