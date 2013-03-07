@@ -140,6 +140,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return ret;
     }
  
+    public void clearAll(){
+    	SQLiteDatabase db = this.getWritableDatabase();
+    	db.execSQL("DELETE FROM " + TABLE_WEIGHTS + ";");
+    }
 }
 
 

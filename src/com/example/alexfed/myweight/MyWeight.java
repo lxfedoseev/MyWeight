@@ -202,21 +202,9 @@ public class MyWeight extends Activity {
 		layout.addView(graphView);  	
 	}
 	
-	private void clearDB(){
-		
+	private void clearDB(){	
 		DatabaseHandler db = new DatabaseHandler(this);
-		if(db.getWeightsCount()==0){
-			Toast.makeText(getApplicationContext(), R.string.db_empty, Toast.LENGTH_LONG).show();
-			return;
-		}
-		
-		List<WeightEntry> weights = db.getAllWeight();
-		
-		for (WeightEntry w : weights) {
-			db.deleteWeight(w);
-		}
-		Toast.makeText(getApplicationContext(), R.string.db_clear, Toast.LENGTH_LONG).show();
-		return;
+		db.clearAll();
 	}
 	
 	private void testAddSomeWeights(){
